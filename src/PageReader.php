@@ -55,6 +55,7 @@ class PageReader {
                 );
             }
 
+            $page = null;
             while ($this->parts) {
                 $part = array_shift($this->parts);
                 if ($part == '</page>') {
