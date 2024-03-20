@@ -46,7 +46,12 @@ class PageReader {
     public function getPage(): ?string {
         while (!feof($this->bz)) {
             if (!$this->parts) {
-                $text = bzread($this->bz, 4096);
+                // Keep reading text while tag is split at end.
+                $text = '';
+                do {
+                    $text .= bzread($this->bz, 1024);
+                } while (preg_match('/<[^>]*$/', $text) && !feof($this->bz));
+
                 $this->parts = preg_split(
                     '#(<page|</page>)#',
                     $text,
@@ -55,16 +60,16 @@ class PageReader {
                 );
             }
 
-            $page = null;
             while ($this->parts) {
                 $part = array_shift($this->parts);
+
                 if ($part == '</page>') {
                     // Return the page for processing, and reset $page for the next call
                     $page .= $part;
                     return $page;
                 } elseif ($part == '<page') {
                     $page = $part;
-                } elseif ($page) {
+                } elseif (!empty($page)) {
                     $page .= $part;
                 }
             }
