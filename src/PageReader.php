@@ -1,21 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wiktionary;
 
 use Exception;
 
-/**
- * @class Read and process pages from a compressed file.
- *
- * This class reads pages from a compressed file using the bzip2 format.  It
- * provides methods to retrieve individual pages from the file for processing.
- */
-class PageReader {
-    /**
-     * @var string The name of the file to read from.
-     */
-    private $fileName;
-
+class PageReader
+{
     /**
      * @var resource The file handle for the bzip2 compressed file.
      */
@@ -33,8 +25,9 @@ class PageReader {
      *
      * @throws Exception If the file cannot be opened.
      */
-    public function __construct(string $fileName) {
-        $this->fileName = $fileName;
+    public function __construct(
+        private readonly string $fileName
+    ) {
         $this->openFile();
     }
 
@@ -43,14 +36,15 @@ class PageReader {
      *
      * @return string|null The page content, or null if the end of the file is reached.
      */
-    public function getPage(): ?string {
-        while (!feof($this->bz)) {
-            if (!$this->parts) {
+    public function getPage(): ?string
+    {
+        while (! feof($this->bz)) {
+            if (! $this->parts) {
                 // Keep reading text while tag is split at end.
                 $text = '';
                 do {
                     $text .= bzread($this->bz, 1024);
-                } while (preg_match('/<[^>]*$/', $text) && !feof($this->bz));
+                } while (preg_match('/<[^>]*$/', $text) && ! feof($this->bz));
 
                 $this->parts = preg_split(
                     '#(<page|</page>)#',
@@ -62,14 +56,15 @@ class PageReader {
 
             while ($this->parts) {
                 $part = array_shift($this->parts);
-
-                if ($part == '</page>') {
+                if ($part === '</page>') {
                     // Return the page for processing, and reset $page for the next call
                     $page .= $part;
                     return $page;
-                } elseif ($part == '<page') {
+                }
+
+                if ($part === '<page') {
                     $page = $part;
-                } elseif (!empty($page)) {
+                } elseif ($page !== '' && $page !== '0') {
                     $page .= $part;
                 }
             }
@@ -84,10 +79,11 @@ class PageReader {
      *
      * @throws Exception If the file cannot be opened.
      */
-    private function openFile(): void {
-        $this->bz = bzopen($this->fileName, "r");
-        if (!$this->bz) {
-            throw new Exception("Couldn't open {$this->fileName}");
+    private function openFile(): void
+    {
+        $this->bz = bzopen($this->fileName, 'r');
+        if (! $this->bz) {
+            throw new Exception("Couldn't open " . $this->fileName);
         }
     }
 }

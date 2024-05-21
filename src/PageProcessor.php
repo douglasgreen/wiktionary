@@ -1,28 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wiktionary;
 
 use SimpleXMLElement;
 
-/**
- * @class Extract data from a Wiktionary page XML string.
- *
- * This class takes an XML string representing a Wiktionary page and provides
- * methods to retrieve various attributes and data from the page, such as the
- * title, namespace, contributor information, and the page content.
- */
-class PageProcessor {
+class PageProcessor
+{
     /**
      * @var SimpleXMLElement The SimpleXMLElement object representing the page XML.
      */
-    private $xml;
+    private readonly \SimpleXMLElement|bool $xml;
 
     /**
      * Constructor for the PageProcessor class.
      *
      * @param string $xmlString The XML string representing the Wiktionary page.
      */
-    public function __construct(string $xmlString) {
+    public function __construct(string $xmlString)
+    {
         $this->xml = simplexml_load_string($xmlString);
     }
 
@@ -31,8 +28,9 @@ class PageProcessor {
      *
      * @return string The title of the page.
      */
-    public function getTitle(): string {
-        return (string)$this->xml->title;
+    public function getTitle(): string
+    {
+        return (string) $this->xml->title;
     }
 
     /**
@@ -40,8 +38,9 @@ class PageProcessor {
      *
      * @return string The namespace of the page.
      */
-    public function getNamespace(): string {
-        return (string)$this->xml->ns;
+    public function getNamespace(): string
+    {
+        return (string) $this->xml->ns;
     }
 
     /**
@@ -49,8 +48,9 @@ class PageProcessor {
      *
      * @return string The ID of the page.
      */
-    public function getId(): string {
-        return (string)$this->xml->id;
+    public function getId(): string
+    {
+        return (string) $this->xml->id;
     }
 
     /**
@@ -58,8 +58,9 @@ class PageProcessor {
      *
      * @return string The title of the redirect page, or an empty string if not a redirect.
      */
-    public function getRedirectTitle(): string {
-        return (string)$this->xml->redirect['title'];
+    public function getRedirectTitle(): string
+    {
+        return (string) $this->xml->redirect['title'];
     }
 
     /**
@@ -67,8 +68,9 @@ class PageProcessor {
      *
      * @return string The ID of the page revision.
      */
-    public function getRevisionId(): string {
-        return (string)$this->xml->revision->id;
+    public function getRevisionId(): string
+    {
+        return (string) $this->xml->revision->id;
     }
 
     /**
@@ -76,8 +78,9 @@ class PageProcessor {
      *
      * @return string The ID of the parent revision.
      */
-    public function getParentId(): string {
-        return (string)$this->xml->revision->parentid;
+    public function getParentId(): string
+    {
+        return (string) $this->xml->revision->parentid;
     }
 
     /**
@@ -85,8 +88,9 @@ class PageProcessor {
      *
      * @return string The timestamp of the page revision.
      */
-    public function getTimestamp(): string {
-        return (string)$this->xml->revision->timestamp;
+    public function getTimestamp(): string
+    {
+        return (string) $this->xml->revision->timestamp;
     }
 
     /**
@@ -94,8 +98,9 @@ class PageProcessor {
      *
      * @return string The username of the contributor.
      */
-    public function getContributorUsername(): string {
-        return (string)$this->xml->revision->contributor->username;
+    public function getContributorUsername(): string
+    {
+        return (string) $this->xml->revision->contributor->username;
     }
 
     /**
@@ -103,8 +108,9 @@ class PageProcessor {
      *
      * @return string The ID of the contributor.
      */
-    public function getContributorId(): string {
-        return (string)$this->xml->revision->contributor->id;
+    public function getContributorId(): string
+    {
+        return (string) $this->xml->revision->contributor->id;
     }
 
     /**
@@ -112,8 +118,9 @@ class PageProcessor {
      *
      * @return string The comment associated with the page revision.
      */
-    public function getComment(): string {
-        return (string)$this->xml->revision->comment;
+    public function getComment(): string
+    {
+        return (string) $this->xml->revision->comment;
     }
 
     /**
@@ -121,8 +128,9 @@ class PageProcessor {
      *
      * @return string The content model of the page.
      */
-    public function getModel(): string {
-        return (string)$this->xml->revision->model;
+    public function getModel(): string
+    {
+        return (string) $this->xml->revision->model;
     }
 
     /**
@@ -130,8 +138,9 @@ class PageProcessor {
      *
      * @return string The content format of the page.
      */
-    public function getFormat(): string {
-        return (string)$this->xml->revision->format;
+    public function getFormat(): string
+    {
+        return (string) $this->xml->revision->format;
     }
 
     /**
@@ -139,8 +148,9 @@ class PageProcessor {
      *
      * @return string The text content of the page.
      */
-    public function getText(): string {
-        return (string)$this->xml->revision->text;
+    public function getText(): string
+    {
+        return (string) $this->xml->revision->text;
     }
 
     /**
@@ -148,7 +158,8 @@ class PageProcessor {
      *
      * @return string The SHA-1 hash of the page content.
      */
-    public function getSha1(): string {
-        return (string)$this->xml->revision->sha1;
+    public function getSha1(): string
+    {
+        return (string) $this->xml->revision->sha1;
     }
 }
