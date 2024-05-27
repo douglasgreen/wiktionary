@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Wiktionary;
-
-use SimpleXMLElement;
+namespace DouglasGreen\Wiktionary;
 
 class PageProcessor
 {
     /**
-     * @var SimpleXMLElement The SimpleXMLElement object representing the page XML.
+     * @var \SimpleXMLElement The SimpleXMLElement object representing the page XML.
      */
     private readonly \SimpleXMLElement|bool $xml;
 

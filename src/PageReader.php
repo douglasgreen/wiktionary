@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wiktionary;
-
-use Exception;
+namespace DouglasGreen\Wiktionary;
 
 class PageReader
 {
@@ -23,7 +21,7 @@ class PageReader
      *
      * @param string $fileName The name of the file to read from.
      *
-     * @throws Exception If the file cannot be opened.
+     * @throws \Exception If the file cannot be opened.
      */
     public function __construct(
         private readonly string $fileName
@@ -77,13 +75,13 @@ class PageReader
     /**
      * Opens the compressed file for reading.
      *
-     * @throws Exception If the file cannot be opened.
+     * @throws \Exception If the file cannot be opened.
      */
     private function openFile(): void
     {
         $this->bz = bzopen($this->fileName, 'r');
         if (! $this->bz) {
-            throw new Exception("Couldn't open " . $this->fileName);
+            throw new \Exception("Couldn't open " . $this->fileName);
         }
     }
 }

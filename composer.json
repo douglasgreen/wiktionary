@@ -2,9 +2,10 @@
     "name": "douglasgreen/wiktionary",
     "description": "Process Wiktionary data dumps",
     "license": "MIT",
+    "type": "project",
     "autoload": {
         "psr-4": {
-            "Wiktionary\\": "src/"
+            "DouglasGreen\\Wiktionary\\": "src/"
         }
     },
     "require": {
