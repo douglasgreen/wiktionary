@@ -9,12 +9,12 @@ class PageReader
     /**
      * @var resource The file handle for the bzip2 compressed file.
      */
-    private $bz;
+    private $bzHandle;
 
     /**
      * @var array The buffer for storing partial page data.
      */
-    private $parts = '';
+    private array $parts = [];
 
     /**
      * Constructor for the PageReader class.
@@ -36,23 +36,29 @@ class PageReader
      */
     public function getPage(): ?string
     {
-        while (! feof($this->bz)) {
-            if (! $this->parts) {
+        $page = '';
+        while (! feof($this->bzHandle)) {
+            if ($this->parts !== []) {
                 // Keep reading text while tag is split at end.
                 $text = '';
                 do {
-                    $text .= bzread($this->bz, 1024);
-                } while (preg_match('/<[^>]*$/', $text) && ! feof($this->bz));
+                    $text .= bzread($this->bzHandle, 1024);
+                } while (preg_match('/<[^>]*$/', $text) === 1 && ! feof($this->bzHandle));
 
-                $this->parts = preg_split(
+                $parts = preg_split(
                     '#(<page|</page>)#',
                     $text,
                     -1,
                     PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
                 );
+                if ($parts === false) {
+                    throw new \Exception('Bad regexp');
+                }
+
+                $this->parts = $parts;
             }
 
-            while ($this->parts) {
+            while ($this->parts !== []) {
                 $part = array_shift($this->parts);
                 if ($part === '</page>') {
                     // Return the page for processing, and reset $page for the next call
@@ -68,7 +74,7 @@ class PageReader
             }
         }
 
-        bzclose($this->bz);
+        bzclose($this->bzHandle);
         return null;
     }
 
@@ -79,9 +85,11 @@ class PageReader
      */
     private function openFile(): void
     {
-        $this->bz = bzopen($this->fileName, 'r');
-        if (! $this->bz) {
+        $bzHandle = bzopen($this->fileName, 'r');
+        if ($bzHandle === false) {
             throw new \Exception("Couldn't open " . $this->fileName);
         }
+
+        $this->bzHandle = $bzHandle;
     }
 }

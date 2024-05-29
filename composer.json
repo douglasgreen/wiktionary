@@ -4,6 +4,9 @@
     "license": "MIT",
     "type": "project",
     "autoload": {
+        "files": [
+            "src/Exceptions.php"
+        ],
         "psr-4": {
             "DouglasGreen\\Wiktionary\\": "src/"
         }
