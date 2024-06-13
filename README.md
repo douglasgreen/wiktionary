@@ -11,8 +11,7 @@ See [Project Setup Guide](docs/setup_guide.md).
 
 1. Go to the download page.
 2. Click the latest enwiktionary link.
-3. Download "Articles, templates, media/file descriptions, and primary
-   meta-pages."
+3. Download "Articles, templates, media/file descriptions, and primary meta-pages."
 4. Save in data directory.
 
 ## Preparing

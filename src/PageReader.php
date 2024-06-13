@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DouglasGreen\Wiktionary;
 
+use Exception;
+
 class PageReader
 {
     /**
@@ -21,7 +23,7 @@ class PageReader
      *
      * @param string $fileName The name of the file to read from.
      *
-     * @throws \Exception If the file cannot be opened.
+     * @throws Exception If the file cannot be opened.
      */
     public function __construct(
         private readonly string $fileName
@@ -49,10 +51,10 @@ class PageReader
                     '#(<page|</page>)#',
                     $text,
                     -1,
-                    PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
+                    PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE,
                 );
                 if ($parts === false) {
-                    throw new \Exception('Bad regexp');
+                    throw new Exception('Bad regexp');
                 }
 
                 $this->parts = $parts;
@@ -81,13 +83,13 @@ class PageReader
     /**
      * Opens the compressed file for reading.
      *
-     * @throws \Exception If the file cannot be opened.
+     * @throws Exception If the file cannot be opened.
      */
     private function openFile(): void
     {
         $bzHandle = bzopen($this->fileName, 'r');
         if ($bzHandle === false) {
-            throw new \Exception("Couldn't open " . $this->fileName);
+            throw new Exception("Couldn't open " . $this->fileName);
         }
 
         $this->bzHandle = $bzHandle;
