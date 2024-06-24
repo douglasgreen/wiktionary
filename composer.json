@@ -8,10 +8,19 @@
             "DouglasGreen\\Wiktionary\\": "src/"
         }
     },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/douglasgreen/config-setup"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/douglasgreen/php-linter"
         }
     ],
     "require": {
@@ -29,6 +38,7 @@
     "scripts": {
         "lint": [
             "ecs",
+            "php-linter",
             "phpstan analyse",
             "phpmd --cache --cache-file var/cache/phpmd/cache.php . text phpmd.xml",
             "rector --dry-run"
@@ -37,7 +47,7 @@
             "ecs --fix",
             "rector"
         ],
-        "post-install-cmd": "vendor/douglasgreen/config-setup/bin/copy_files.php",
-        "post-update-cmd": "vendor/douglasgreen/config-setup/bin/copy_files.php"
+        "post-install-cmd": "config-setup",
+        "post-update-cmd": "config-setup"
     }
 }
