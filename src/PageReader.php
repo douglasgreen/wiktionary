@@ -14,7 +14,7 @@ class PageReader
     private $bzHandle;
 
     /**
-     * @var array The buffer for storing partial page data.
+     * @var string[] The buffer for storing partial page data.
      */
     private array $parts = [];
 

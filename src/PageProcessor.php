@@ -9,16 +9,22 @@ class PageProcessor
     /**
      * @var \SimpleXMLElement The SimpleXMLElement object representing the page XML.
      */
-    private readonly \SimpleXMLElement|bool $xml;
+    private readonly \SimpleXMLElement $xml;
 
     /**
      * Constructor for the PageProcessor class.
      *
      * @param string $xmlString The XML string representing the Wiktionary page.
+     * @throws \InvalidArgumentException If the XML string is malformed.
      */
     public function __construct(string $xmlString)
     {
-        $this->xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string($xmlString);
+        if ($xml === false) {
+            throw new \InvalidArgumentException('Malformed XML string provided to PageProcessor');
+        }
+
+        $this->xml = $xml;
     }
 
     /**
